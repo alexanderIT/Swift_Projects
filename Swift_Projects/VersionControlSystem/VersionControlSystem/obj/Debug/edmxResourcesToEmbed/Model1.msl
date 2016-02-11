@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="VCSContext">
+    <EntitySetMapping Name="Files">
+      <EntityTypeMapping TypeName="Model.File">
+        <MappingFragment StoreEntitySet="Files">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="File1" ColumnName="File" />
+          <ScalarProperty Name="Locked" ColumnName="Locked" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="Model.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Versions">
+      <EntityTypeMapping TypeName="Model.Version">
+        <MappingFragment StoreEntitySet="Versions">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Creator" ColumnName="Creator" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="FileId" ColumnName="FileId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

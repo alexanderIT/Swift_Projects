@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Files">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="File" Type="varchar(max)" Nullable="false" />
+    <Property Name="Locked" Type="int" />
+    <Property Name="Comment" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Versions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Creator" Type="int" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="FileId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Users_Files">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Files" Type="Self.Files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Files">
+        <PropertyRef Name="Locked" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Versions_Files">
+    <End Role="Files" Type="Self.Files" Multiplicity="1" />
+    <End Role="Versions" Type="Self.Versions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Files">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Versions">
+        <PropertyRef Name="FileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Versions_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Versions" Type="Self.Versions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Versions">
+        <PropertyRef Name="Creator" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Versions" EntityType="Self.Versions" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Users_Files" Association="Self.FK_Users_Files">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Files" EntitySet="Files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Versions_Files" Association="Self.FK_Versions_Files">
+      <End Role="Files" EntitySet="Files" />
+      <End Role="Versions" EntitySet="Versions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Versions_Users" Association="Self.FK_Versions_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Versions" EntitySet="Versions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

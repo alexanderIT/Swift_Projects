@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="File">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="File1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Locked" Type="Int32" />
+    <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="Self.FK_Users_Files" FromRole="Files" ToRole="Users" />
+    <NavigationProperty Name="Versions" Relationship="Self.FK_Versions_Files" FromRole="Files" ToRole="Versions" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Files" Relationship="Self.FK_Users_Files" FromRole="Users" ToRole="Files" />
+    <NavigationProperty Name="Versions" Relationship="Self.FK_Versions_Users" FromRole="Users" ToRole="Versions" />
+  </EntityType>
+  <EntityType Name="Version">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Creator" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="FileId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="File" Relationship="Self.FK_Versions_Files" FromRole="Versions" ToRole="Files" />
+    <NavigationProperty Name="User" Relationship="Self.FK_Versions_Users" FromRole="Versions" ToRole="Users" />
+  </EntityType>
+  <Association Name="FK_Users_Files">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Files" Type="Self.File" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Files">
+        <PropertyRef Name="Locked" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Versions_Files">
+    <End Role="Files" Type="Self.File" Multiplicity="1" />
+    <End Role="Versions" Type="Self.Version" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Files">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Versions">
+        <PropertyRef Name="FileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Versions_Users">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Versions" Type="Self.Version" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Versions">
+        <PropertyRef Name="Creator" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="VCSContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Files" EntityType="Self.File" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="Versions" EntityType="Self.Version" />
+    <AssociationSet Name="FK_Users_Files" Association="Self.FK_Users_Files">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Files" EntitySet="Files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Versions_Files" Association="Self.FK_Versions_Files">
+      <End Role="Files" EntitySet="Files" />
+      <End Role="Versions" EntitySet="Versions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Versions_Users" Association="Self.FK_Versions_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Versions" EntitySet="Versions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
